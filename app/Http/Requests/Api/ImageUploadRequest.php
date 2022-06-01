@@ -4,7 +4,7 @@ namespace App\Http\Requests\Api;
 
 use App\Http\Requests\RootRequest;
 
-class LogoutRequest extends RootRequest
+class ImageUploadRequest extends RootRequest
 {
     public function authorize()
     {
@@ -14,7 +14,7 @@ class LogoutRequest extends RootRequest
     public function rules()
     {
         return [
-            'token' => 'required'
+            'image' => 'mimes:jpeg,jpg,png|required|max:10000'
         ];
     }
 

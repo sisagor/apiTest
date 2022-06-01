@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth\Api;
 
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +12,6 @@ use App\Http\Requests\Api\LoginRequest;
 use App\Http\Controllers\Auth\Api\BaseController;
 use Symfony\Component\HttpFoundation\Response;
 use Tymon\JWTAuth\Exceptions\JWTException;
-use App\Http\Requests\Api\LogoutRequest;
 
 
 
@@ -37,11 +37,13 @@ class AuthenticationController extends BaseController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function logout(LogoutRequest $request)
+    public function logout(Request $request)
     {
         //Request is validated, do logout
+        $forever = true;
         try {
-            JWTAuth::invalidate($request->token);
+
+            $this->user = JWTAuth::parseToken()->invalidate($forever);
 
             return response()->json([
                 'success' => true,
@@ -51,7 +53,7 @@ class AuthenticationController extends BaseController
         catch (JWTException $exception) {
             return response()->json([
                 'success' => false,
-                'message' => 'Sorry, user cannot be logged out'
+                'message' => $exception->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
