@@ -37,10 +37,10 @@ class HomeController extends BaseController
             }
             catch (\Exception $exception){
 
-                return response()->json(['status' => 0, 'msg' => $exception->getMessage()]);
+                return $this->handleError($exception->getMessage());
             }
 
-            return response()->json(['status' => 1, 'data' => $user->image->path]);
+            return $this->handleResponse($user->image->path, "image upload success");
         }
 
     }
